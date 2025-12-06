@@ -1,7 +1,7 @@
 import httpx
 import time
 
-create_user_pauload = {
+create_user_payload = {
   "email": f"user.{time.time()}@example.com",
   "lastName": "string",
   "firstName": "string",
@@ -9,7 +9,7 @@ create_user_pauload = {
   "phoneNumber": "string"
 }
 
-create_user_res = httpx.post("http://localhost:8003/api/v1/users", json=create_user_pauload)
+create_user_res = httpx.post("http://localhost:8003/api/v1/users", json=create_user_payload)
 create_user_response_data = create_user_res.json()
 
 print("Create user response: ", create_user_response_data)
@@ -19,5 +19,6 @@ open_deposit_payload = {"user_id":create_user_response_data['user']['id']}
 
 open_deposit_res = httpx.post("http://localhost:8003/api/v1/accounts/open-deposit-account", json=open_deposit_payload)
 open_deposit_data = open_deposit_res.json()
+
 print("Open deposit response: ", open_deposit_data)
 print("Status Code: ", open_deposit_res.status_code)
