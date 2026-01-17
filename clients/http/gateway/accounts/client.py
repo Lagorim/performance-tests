@@ -2,11 +2,32 @@ from clients.http.client import HTTPClient
 from typing import TypedDict
 from httpx import Response
 
+from clients.http.gateway.cards.client import CardDict
+from clients.http.gateway.client import build_gateway_http_client
+
+# Добавили описание структуры счета
+class AccountDict(TypedDict):
+    """
+    Описание структуры аккаунта.
+    """
+    id: str
+    type: str
+    cards: list[CardDict]
+    status: str
+    balance: float
+
+
 class GetAccountsQueryDict(TypedDict):
     """
     Структура данных для получения списка счетов пользователя.
     """
     userId: str
+
+class GetAccountResponseDict(TypedDict):
+    """
+    Описание структуры ответа получения списка счетов.
+    """
+    accounts: list[AccountDict]    
 
 class OpenDepositAccountRequestDict(TypedDict):
     """
@@ -14,11 +35,23 @@ class OpenDepositAccountRequestDict(TypedDict):
     """
     userId: str
 
+class OpenDepositAccountResponseDict(TypedDict):
+    """
+    Описание структуры ответа открытия депозитного счета.
+    """
+    account: AccountDict
+
 class OpenSavingsAccountRequestDict(TypedDict):
     """
     Структура данных для открытия сберегательного счета.
     """
     userId: str
+
+class OpenSavingsAccountResponseDict(TypedDict):
+    """
+    Описание структуры ответа открытия сберегательного счета.
+    """
+    account: AccountDict    
 
 class OpenDebitCardAccountRequestDict(TypedDict):
     """
@@ -26,11 +59,23 @@ class OpenDebitCardAccountRequestDict(TypedDict):
     """
     userId: str
 
+class OpenDebitAccountResponseDict(TypedDict):
+    """
+    Описание структуры ответа открытия дебетового счета.
+    """
+    account: AccountDict     
+
 class OpenCreditCardAccountRequestDict(TypedDict):
     """
     Структура данных для открытия кредитного счета.
     """
-    userId: str                
+    userId: str
+
+class OpenCreditAccountResponseDict(TypedDict):
+    """
+    Описание структуры ответа открытия кредитного счета.
+    """
+    account: AccountDict                    
 
 class AccountGatewayHTTPClient(HTTPClient):
     """
@@ -86,3 +131,42 @@ class AccountGatewayHTTPClient(HTTPClient):
         """
         
         return self.post("/api/v1/accounts/open-credit-card-account", json=request)
+    
+    #Добавили новый метод
+    def get_account(self, user_id: str) -> GetAccountResponseDict:
+        query = GetAccountsQueryDict(userId=user_id)
+        response = self.get_account_api(query)
+        return response.json()
+    
+    #Добавили новый метод
+    def open_deposit_account(self, user_id: str) -> OpenDepositAccountResponseDict:
+        request = OpenDepositAccountRequestDict(userId=user_id)
+        response = self.open_deposit_account_api(request)
+        return response.json()
+    
+    #Добавили новый метод
+    def open_savings_account(self, user_id: str) -> OpenSavingsAccountResponseDict:
+        request = OpenSavingsAccountRequestDict(userId=user_id)
+        response = self.open_savings_account_api(request)
+        return response.json()
+    
+    #Добавили новый метод
+    def open_debit_card_account(self, user_id: str) -> OpenDebitAccountResponseDict:
+        request = OpenDebitCardAccountRequestDict(userId=user_id)
+        response = self.open_debit_card_account_api(request)
+        return response.json()
+    
+    #Добавили новый метод
+    def open_credit_card_account(self, user_id: str) -> OpenCreditAccountResponseDict:
+        request = OpenCreditCardAccountRequestDict(userId=user_id)
+        response = self.open_credit_card_account_api(request)
+        return response.json()
+    
+def build_accounts_gateway_http_client() -> AccountGatewayHTTPClient:
+    """
+    Функция создаёт экземпляр AccountsGatewayHTTPClient с уже настроенным HTTP-клиентом.
+
+    :return: Готовый к использованию AccountsGatewayHTTPClient.
+    """
+    
+    return AccountGatewayHTTPClient(client=build_gateway_http_client())    

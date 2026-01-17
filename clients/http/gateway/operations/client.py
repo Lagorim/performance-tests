@@ -2,6 +2,8 @@ from clients.http.client import HTTPClient
 from typing import TypedDict
 from httpx import Response
 
+from clients.http.gateway.client import build_gateway_http_client
+
 class GetOperationsViewQueryDict(TypedDict):
     """
     Структура данных для получения списка по операциям определенного счета.
@@ -201,3 +203,12 @@ class OperationsGatewayHTTPClient(HTTPClient):
         """
         
         return self.post("/api/v1/operations/make-cash-withdrawal-operation", json=request)
+    
+def build_operations_gateway_http_client() -> OperationsGatewayHTTPClient:
+    """
+    Функция создает экземпляр OperationsGatewayHTTPClient с уже настроенным HTTP клиентом.
+
+    :return: Готовый к использованию OperationsGatewayHTTPClient
+    """
+
+    return OperationsGatewayHTTPClient(client=build_gateway_http_client())     
