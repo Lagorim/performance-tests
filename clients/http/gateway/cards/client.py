@@ -3,50 +3,12 @@ from typing import TypedDict
 from httpx import Response
 
 from clients.http.gateway.client import build_gateway_http_client
-
-# Добавили описание структуры карты
-class CardDict(TypedDict):
-    """
-    Описание структуры карты.
-    """
-    id: str
-    pin: str
-    cvv: str
-    type: str
-    status: str
-    accountId: str
-    cardNumber: str
-    cardHolder: str
-    expiryDate: str
-    paymentSystem: str
-class CreateVirtualCardDict(TypedDict):
-    """
-    Структура данных для запроса на выдачу виртуальной карты.
-    """
-
-    userId: str
-    accountId: str
-
-class IssueVurtualCardResponseDict(TypedDict):
-    """
-    Описание структуры ответа выпуска виртуальной карты.
-    """
-    card: CardDict
-
-
-class CreatePhysicalCardDict(TypedDict):
-    """
-    Структура данных для запроса на выдачу физической карты.
-    """
-    
-    userId: str
-    accountId: str
-
-class IssuePhysicalCardResponseDict(TypedDict):
-    """
-    Описание структуры ответа выпуска физической карты.
-    """
-    card: CardDict       
+from clients.http.gateway.cards.schema import (
+    IssueVirtualCardRequestSchema,
+    IssueVirtualCardResponseSchema,
+    IssuePhysicalCardRequestSchema,
+    IssuePhysicalCardResponseSchema
+)
 
 class CardsGatewayHTTPClient(HTTPClient):
 
@@ -54,7 +16,7 @@ class CardsGatewayHTTPClient(HTTPClient):
     Клиент для взаимодействия с /api/v1/cards сервиса http-gateway.
     """
 
-    def issue_virtual_card_api(self, request: CreateVirtualCardDict) -> Response:
+    def issue_virtual_card_api(self, request: IssueVirtualCardRequestSchema) -> Response:
         """
         Выполянет POST-запрос на выдачу виртуальной карты.
 
@@ -62,9 +24,12 @@ class CardsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект httpx.Response).
         """
         
-        return self.post("/api/v1/cards/issue-virtual-card", json=request)
+        return self.post(
+            "/api/v1/cards/issue-virtual-card", 
+            json=request.model_dump(by_alias=True)
+            )
 
-    def issue_physical_card_api(self, request: CreatePhysicalCardDict) -> Response:
+    def issue_physical_card_api(self, request: IssuePhysicalCardRequestSchema) -> Response:
         """
         Выполянет POST-запрос на выдачу физической карты.
 
@@ -72,29 +37,32 @@ class CardsGatewayHTTPClient(HTTPClient):
         :return: Ответ от сервера (объект httpx.Response).
         """
 
-        return self.post("/api/v1/cards/issue-physical-card", json=request)
+        return self.post(
+            "/api/v1/cards/issue-physical-card", 
+            json=request.model_dump(by_alias=True)
+            )
 
     # Добавили метод для работы с виртуальной картой
-    def issue_virtual_card(self, user_id: str, account_id: str) -> IssueVurtualCardResponseDict:
-        request = CreateVirtualCardDict(
+    def issue_virtual_card(self, user_id: str, account_id: str) -> IssueVirtualCardResponseSchema:
+        request = IssueVirtualCardRequestSchema(
             userId=user_id, 
             accountId=account_id
         )
 
         response = self.issue_virtual_card_api(request)
 
-        return response.json()
+        return IssueVirtualCardResponseSchema.model_validate_json(response.text)
     
     # Добавили метод для работы с физической картой
-    def issue_physical_card(self, user_id: str, account_id: str) -> IssuePhysicalCardResponseDict:
-        request = CreatePhysicalCardDict(
+    def issue_physical_card(self, user_id: str, account_id: str) -> IssuePhysicalCardResponseSchema:
+        request = IssuePhysicalCardRequestSchema(
             userId=user_id, 
             accountId=account_id
         )
 
         response = self.issue_physical_card_api(request)
 
-        return response.json()
+        return IssuePhysicalCardResponseSchema.model_validate_json(response.text)
 
     
 def build_cards_gateway_http_client() -> CardsGatewayHTTPClient:
