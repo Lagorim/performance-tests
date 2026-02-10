@@ -197,8 +197,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями комиссии
     def make_fee_operation(self, card_id: str, account_id: str) -> MakeFeeOperationResponseSchema:
         request = MakeFeeOperationRequestSchema(
-        status="COMPLETED",
-        amount=55.77,
         card_id=card_id,
         account_id=account_id
         )
@@ -208,8 +206,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями пополнения
     def make_top_up_operation(self, card_id: str, account_id: str) -> MakeTopUpOperationResponseSchema:
         request = MakeTopUpOperationRequestSchema(
-        status="COMPLETED",
-        amount=100.45,
         card_id=card_id,
         account_id=account_id
         )
@@ -219,8 +215,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями кэшбека
     def make_cashback_operation(self, card_id: str, account_id: str) -> MakeCashbackOperationResponseSchema:
         request = MakeCashbackOperationRequestSchema(
-        status="COMPLETED",
-        amount=11.15,
         card_id=card_id,
         account_id=account_id
         )
@@ -230,8 +224,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями перевода
     def make_transfer_operation(self, card_id: str, account_id: str) -> MakeTransferOperationResponseSchema:
         request = MakeTransferOperationRequestSchema(
-        status="COMPLETED",
-        amount=190.45,
         card_id=card_id,
         account_id=account_id
         )
@@ -241,8 +233,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями покупки
     def make_purchase_operation(self, card_id: str, account_id: str) -> MakePurchaseOperationResponseSchema:
         request = MakePurchaseOperationRequestSchema(
-        status="COMPLETED",
-        amount=167.45,
         card_id=card_id,
         account_id=account_id
         )
@@ -252,8 +242,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями оплаты счета
     def make_bill_payment_operation(self, card_id: str, account_id: str) -> MakeBillOperationResponseSchema:
         request = MakeBillOperationRequestSchema(
-        status="COMPLETED",
-        amount=106.45,
         card_id=card_id,
         account_id=account_id
         )
@@ -263,8 +251,6 @@ class OperationsGatewayHTTPClient(HTTPClient):
     #Добавляем методы для работы с операциями снятия наличных
     def make_cash_withdrawal_operation(self, card_id: str, account_id: str) -> MakeCashWithdrawalOperationResponseSchema:
         request = MakeCashWithdrawalOperationRequestSchema(
-        status="COMPLETED",
-        amount=1000.00,
         card_id=card_id,
         account_id=account_id
         )
