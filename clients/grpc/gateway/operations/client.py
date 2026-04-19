@@ -17,7 +17,8 @@ from contracts.services.gateway.operations.rpc_make_purchase_operation_pb2 impor
 from contracts.services.gateway.operations.rpc_make_bill_payment_operation_pb2 import MakeBillPaymentOperationRequest, MakeBillPaymentOperationResponse
 from contracts.services.gateway.operations.rpc_make_cash_withdrawal_operation_pb2 import MakeCashWithdrawalOperationRequest, MakeCashWithdrawalOperationResponse
 
-from tools.fakers import fake, OperationType, OperationStatus
+from tools.fakers import fake
+from contracts.services.operations.operation_pb2 import OperationStatus
 
 class OperationsGatewayGRPCClient(GRPCClient):
     """
@@ -311,7 +312,7 @@ class OperationsGatewayGRPCClient(GRPCClient):
 
 
 
-def build_documents_gateway_grpc_client() -> OperationsGatewayGRPCClient:
+def build_operations_gateway_grpc_client() -> OperationsGatewayGRPCClient:
     """
     Фабрика для создания экземпляра OperationsGatewayGRPCClient.
 
