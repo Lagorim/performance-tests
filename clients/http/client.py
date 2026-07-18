@@ -1,5 +1,5 @@
 from httpx import Client, URL, QueryParams, Response
-from typing import Any
+from typing import Any, TypedDict
 
 class HTTPClientExtensions(TypedDict, total=False):
     route: str

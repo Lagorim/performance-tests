@@ -1,3 +1,4 @@
+import logging
 from httpx import Client
 from locust.env import Environment  # Импорт окружения Locust для передачи в хуки
 
